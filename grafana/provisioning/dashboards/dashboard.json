@@ -1,0 +1,148 @@
+{
+    "annotations": {
+        "list": []
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": null,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+        {
+            "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Snowflake-Infinity"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "custom": {
+                        "axisCenteredZero": true,
+                        "axisColorMode": "text",
+                        "axisLabel": "₹ Crores",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "area"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "green",
+                                "value": 0
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 14,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 1,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "columns": [
+                        {
+                            "selector": "RUN_DT",
+                            "text": "Trading Day",
+                            "type": "timestamp",
+                            "timestampFormat": "YYYY-MM-DD"
+                        },
+                        {
+                            "selector": "DII_NET",
+                            "text": "DII Net",
+                            "type": "number"
+                        },
+                        {
+                            "selector": "FII_NET",
+                            "text": "FII Net",
+                            "type": "number"
+                        }
+                    ],
+                    "datasource": {
+                        "type": "yesoreyeram-infinity-datasource",
+                        "uid": "Snowflake-Infinity"
+                    },
+                    "format": "table",
+                    "global_query_id": "",
+                    "refId": "A",
+                    "root_selector": "",
+                    "source": "url",
+                    "type": "json",
+                    "parser": "backend",
+                    "url": "http://backend:8000/data",
+                    "url_options": {
+                        "data": "",
+                        "method": "GET"
+                    }
+                }
+            ],
+            "title": "DII/FII Net Buy/Sell Trend",
+            "description": "X-axis: Trading Day | Y-axis: ₹ Crores",
+            "type": "timeseries"
+        }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+        "list": []
+    },
+    "time": {
+        "from": "now-30d",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "NSE FII/DII Dashboard",
+    "uid": "nse-fii-dii",
+    "version": 4,
+    "weekStart": ""
+}
