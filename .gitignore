@@ -1,4 +1,7 @@
+# Environment variables
 .env
+
+# Python
 __pycache__/
 *.pyc
 *.pyo
@@ -9,3 +12,33 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Logs
+*.log
+
+# Database
+*.db
+*.sqlite3

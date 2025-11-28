@@ -2,14 +2,14 @@
 
 ## Overview
 
-This project visualizes NSE FII/DII (Foreign Institutional Investors / Domestic Institutional Investors) equity data from Snowflake using Grafana dashboards. The system follows a three-tier architecture with data storage, API backend, and visualization layers.
+This project visualizes NSE FII/DII (Foreign Institutional Investors / Domestic Institutional Investors) equity data from PostgreSQL using Grafana dashboards. The system follows a three-tier architecture with data storage, API backend, and visualization layers.
 
 ## Architecture Diagram
 
 ```mermaid
 graph TB
     subgraph "Data Layer"
-        SF[Snowflake Database<br/>t_nse_fii_dii_eq_data]
+        PG[PostgreSQL Database<br/>t_nse_fii_dii_eq_data]
     end
     
     subgraph "Docker Network: grafana-net"
@@ -29,14 +29,14 @@ graph TB
         BROWSER[Web Browser]
     end
     
-    SF -->|SQL Query| API
+    PG -->|SQL Query| API
     ENV -.->|Credentials| API
     API -->|JSON REST API<br/>http://backend:8000/data| INF
     INF --> GF
     DASH --> GF
     BROWSER -->|http://localhost:3000| GF
     
-    style SF fill:#e1f5ff
+    style PG fill:#e1f5ff
     style API fill:#fff4e1
     style GF fill:#ffe1f5
     style BROWSER fill:#e1ffe1
@@ -44,7 +44,7 @@ graph TB
 
 ## Component Details
 
-### 1. Data Layer: Snowflake Database
+### 1. Data Layer: PostgreSQL Database
 
 **Purpose**: Stores historical NSE FII/DII equity trading data
 
@@ -67,14 +67,19 @@ graph TB
 
 **Technology Stack**:
 - FastAPI (Python web framework)
-- Snowflake Connector for Python
+- SQLAlchemy (Database ORM)
+- psycopg2 (PostgreSQL adapter)
 - Pandas for data transformation
 - Uvicorn ASGI server
 
 **Endpoints**:
 
+#### `GET /`
+- **Purpose**: Welcome message and API information
+- **Response**: `{"message": "Welcome to the NFD Visualization API..."}`
+
 #### `GET /data`
-- **Purpose**: Fetch FII/DII data from Snowflake
+- **Purpose**: Fetch FII/DII data from PostgreSQL
 - **Query**: `SELECT RUN_DT, DII_NET, FII_NET FROM t_nse_fii_dii_eq_data ORDER BY RUN_DT ASC`
 - **Response**: JSON array of records
 - **Example**:
@@ -92,14 +97,16 @@ graph TB
 - **Purpose**: Health check endpoint
 - **Response**: `{"status": "ok"}`
 
-**Configuration**: Reads Snowflake credentials from environment variables via `.env` file:
-- `SNOWFLAKE_ACCOUNT`
-- `SNOWFLAKE_USER`
-- `SNOWFLAKE_PASSWORD`
-- `SNOWFLAKE_ROLE`
-- `SNOWFLAKE_WAREHOUSE`
-- `SNOWFLAKE_DATABASE`
-- `SNOWFLAKE_SCHEMA`
+#### `GET /docs`
+- **Purpose**: Interactive API documentation (Swagger UI)
+- **Auto-generated**: FastAPI automatic documentation
+
+**Configuration**: Reads PostgreSQL credentials from environment variables via `.env` file:
+- `POSTGRES_HOST`
+- `POSTGRES_PORT`
+- `POSTGRES_DB`
+- `POSTGRES_USER`
+- `POSTGRES_PASSWORD`
 
 **CORS**: Enabled for all origins to allow Grafana access
 
@@ -136,7 +143,7 @@ Grafana is pre-configured using provisioning files mounted from [`grafana/provis
 ##### Datasource Configuration
 **File**: [`datasources/datasource.yml`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/datasources/datasource.yml)
 
-- **Name**: `Snowflake-Infinity`
+- **Name**: `PostgreSQL-Infinity`
 - **Type**: `yesoreyeram-infinity-datasource`
 - **Access Mode**: Proxy (Grafana server makes the API calls)
 - **Default**: Set as the default datasource
@@ -171,13 +178,13 @@ sequenceDiagram
     participant Grafana
     participant Infinity
     participant Backend
-    participant Snowflake
+    participant PostgreSQL
     
     User->>Grafana: Open Dashboard (localhost:3000)
     Grafana->>Infinity: Load Panel Data
     Infinity->>Backend: GET http://backend:8000/data
-    Backend->>Snowflake: SQL Query (RUN_DT, DII_NET, FII_NET)
-    Snowflake-->>Backend: Result Set
+    Backend->>PostgreSQL: SQL Query (RUN_DT, DII_NET, FII_NET)
+    PostgreSQL-->>Backend: Result Set
     Backend->>Backend: Convert to Pandas DataFrame
     Backend->>Backend: Format as JSON
     Backend-->>Infinity: JSON Response
@@ -191,7 +198,7 @@ sequenceDiagram
 
 ### Advantages of This Architecture
 
-1. **No Direct Database Access**: Grafana doesn't need Snowflake credentials
+1. **No Direct Database Access**: Grafana doesn't need PostgreSQL credentials
    - Backend handles authentication securely
    - Easier to manage access control
 
@@ -281,18 +288,26 @@ Both services are on the same Docker network, enabling:
 | [`docker-compose.yml`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/docker-compose.yml) | Orchestrates both services |
 | [`backend/Dockerfile`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/backend/Dockerfile) | Backend container definition |
 | [`backend/requirements.txt`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/backend/requirements.txt) | Python dependencies |
-| [`.env`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/.env) | Snowflake credentials (gitignored) |
+| [`.env`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/.env) | PostgreSQL credentials (gitignored) |
 | [`grafana/provisioning/datasources/datasource.yml`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/datasources/datasource.yml) | Auto-configure Infinity datasource |
 | [`grafana/provisioning/dashboards/dashboard.yml`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/dashboards/dashboard.yml) | Dashboard provider config |
 | [`grafana/provisioning/dashboards/dashboard.json`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/dashboards/dashboard.json) | Dashboard definition |
 
 ## Security Considerations
 
-1. **Environment Variables**: Snowflake credentials stored in `.env` (gitignored)
+1. **Environment Variables**: PostgreSQL credentials stored in `.env` (gitignored)
 2. **Anonymous Access**: Enabled for demo purposes - disable in production
 3. **CORS**: Currently allows all origins - restrict in production
 4. **Network Isolation**: Backend only accessible within Docker network
 5. **No Hardcoded Secrets**: All sensitive data in environment variables
+
+## Migration History
+
+**November 2025**: Migrated from Snowflake to PostgreSQL
+- Replaced `snowflake-connector-python` with `psycopg2-binary` and `sqlalchemy`
+- Updated connection logic to use SQLAlchemy engine
+- Table schema remains identical (`t_nse_fii_dii_eq_data`)
+- All functionality preserved with improved performance
 
 ## Future Enhancements
 
@@ -302,3 +317,4 @@ Both services are on the same Docker network, enabling:
 - Support multiple dashboards
 - Add alerting rules for significant FII/DII movements
 - Implement data refresh scheduling
+- Add database connection pooling for better performance

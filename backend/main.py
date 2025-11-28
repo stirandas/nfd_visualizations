@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import snowflake.connector
+import psycopg2
+from sqlalchemy import create_engine
 import pandas as pd
 import os
 import traceback
@@ -12,6 +13,10 @@ load_dotenv()
 
 app = FastAPI()
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the NFD Visualization API. Visit /docs for documentation or /data for data."}
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -22,23 +27,21 @@ app.add_middleware(
 )
 
 # Connection details from environment variables
-CONN_PARAMS = {
-    "account": os.getenv("SNOWFLAKE_ACCOUNT"),
-    "user": os.getenv("SNOWFLAKE_USER"),
-    "password": os.getenv("SNOWFLAKE_PASSWORD"),
-    "role": os.getenv("SNOWFLAKE_ROLE"),
-    "warehouse": os.getenv("SNOWFLAKE_WAREHOUSE"),
-    "database": os.getenv("SNOWFLAKE_DATABASE"),
-    "schema": os.getenv("SNOWFLAKE_SCHEMA"),
-    "authenticator": os.getenv("SNOWFLAKE_AUTHENTICATOR", "snowflake")
-}
+# Connection details from environment variables
+def get_db_engine():
+    user = os.getenv("POSTGRES_USER")
+    password = os.getenv("POSTGRES_PASSWORD")
+    host = os.getenv("POSTGRES_HOST")
+    port = os.getenv("POSTGRES_PORT")
+    db = os.getenv("POSTGRES_DB")
+    
+    return create_engine(f"postgresql://{user}:{password}@{host}:{port}/{db}")
 
 @app.get("/data")
 def get_data():
     try:
-        print("Attempting to connect to Snowflake...")
-        conn = snowflake.connector.connect(**CONN_PARAMS)
-        cursor = conn.cursor()
+        print("Attempting to connect to PostgreSQL...")
+        engine = get_db_engine()
         
         print("Connected! Executing query...")
         # Fetch data sorted by date
@@ -47,15 +50,24 @@ def get_data():
         FROM t_nse_fii_dii_eq_data 
         ORDER BY RUN_DT ASC
         """
-        cursor.execute(query)
         
         print("Fetching data...")
-        df = cursor.fetch_pandas_all()
+        # Use pandas read_sql for cleaner dataframe creation
+        with engine.connect() as conn:
+            df = pd.read_sql(query, conn)
         
         print(f"Fetched {len(df)} rows")
         # Convert to list of dicts
         # Ensure RUN_DT is string for JSON
-        df['RUN_DT'] = df['RUN_DT'].astype(str)
+        df['run_dt'] = df['run_dt'].astype(str)
+        
+        # Rename columns to match frontend expectation if postgres returns lowercase
+        # Postgres usually returns lowercase column names
+        df = df.rename(columns={
+            'run_dt': 'RUN_DT',
+            'dii_net': 'DII_NET',
+            'fii_net': 'FII_NET'
+        })
         
         result = df.to_dict(orient='records')
         print("Returning data...")
@@ -65,9 +77,6 @@ def get_data():
         error_msg = f"Error: {str(e)}\n{traceback.format_exc()}"
         print(error_msg)
         raise HTTPException(status_code=500, detail=error_msg)
-    finally:
-        if 'conn' in locals():
-            conn.close()
 
 @app.get("/health")
 def health():
