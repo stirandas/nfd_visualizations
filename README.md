@@ -6,16 +6,15 @@ This project visualizes FII (Foreign Institutional Investors) and DII (Domestic 
 
 ✅ **Completed Features:**
 - FastAPI backend connecting to PostgreSQL
-- Grafana dashboard with time series visualization
-- Color-coded trends (Green: Net Buy, Red: Net Sell)
+- Custom Grafana image (`nfd-grafana:v1.0`)
+- Three pre-configured dashboards with interactive visualizations
+- Color-coded bar charts for easy data interpretation
 - Y-axis labeled as "₹ Crores"
-- Panel title: "DII/FII Net Buy/Sell Trend"
-- Panel description showing axis labels
 - Environment-based configuration
-- Docker containerization
+- Docker containerization with automatic provisioning
 
 🚧 **Pending:**
-- Cloud deployment (options documented in implementation plan)
+- Cloud deployment (GCP deployment would cost ~$13-25/month)
 
 ## Architecture
 
@@ -25,10 +24,28 @@ This project visualizes FII (Foreign Institutional Investors) and DII (Domestic 
 
 ## Features
 
+### Three Interactive Dashboards
+
+1. **FII/DII Net Buy/Sell Trend**
+   - Bar chart visualization with zoom capability
+   - Blue bars for DII, Orange bars for FII
+   - Shows net trading values
+
+2. **FII/DII Total Buy/Sell Values**
+   - Stacked bar charts (Green: Buy, Red: Sell)
+   - Matched Y-axis scales for honest comparison
+   - Separate panels for DII and FII
+
+3. **Data Availability**
+   - Purple bar chart showing data latency
+   - Weekend gaps clearly visible
+   - Latency tracking in hours after market close
+
+### Technical Features
 - ✅ Real-time data from PostgreSQL table `t_nse_fii_dii_eq_data`
-- ✅ Time series visualization of DII_NET and FII_NET trends
-- ✅ Color-coded values: **Green** for positive (net buy), **Red** for negative (net sell)
+- ✅ Interactive visualizations with zoom and pan
 - ✅ Automatic dashboard provisioning
+- ✅ Custom Docker image for easy identification
 
 ## Prerequisites
 
@@ -66,8 +83,8 @@ This project visualizes FII (Foreign Institutional Investors) and DII (Domestic 
 
 2. **Access Grafana**:
    - URL: http://localhost:3000
-   - The dashboard is automatically provisioned
-   - Navigate to: **Dashboards*
+   - All 3 dashboards are automatically provisioned
+   - Navigate to: **Dashboards** → Browse to see all available dashboards
 
 3. **Verify backend**:
    - API: http://localhost:8000/data
@@ -87,9 +104,15 @@ nfd_visualizations/
 │   ├── requirements.txt     # Python dependencies
 │   └── Dockerfile          # Backend container
 ├── grafana/
+│   ├── Dockerfile          # Custom Grafana image
 │   └── provisioning/
-│       ├── datasources/    # Infinity datasource config
-│       └── dashboards/     # Dashboard JSON
+│       ├── datasources/
+│       │   └── datasource.yml          # nfd-Infinity datasource
+│       └── dashboards/
+│           ├── dashboard.yml           # Dashboard provider config  
+│           ├── net-trend-dashboard.json       # Net Buy/Sell Trend
+│           ├── buy-sell-dashboard.json        # Total Buy/Sell Values
+│           └── availability-dashboard.json    # Data Availability
 ├── docker-compose.yml      # Service orchestration
 ├── .env.sample            # Sample environment variables
 └── README.md              # This file

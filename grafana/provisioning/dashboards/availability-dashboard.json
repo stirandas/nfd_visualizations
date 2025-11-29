@@ -212,7 +212,7 @@
           }
         }
       ],
-      "title": "Data Availability Time",
+      "title": "Data Availability Table",
       "type": "table",
       "description": "The time at which NSE published the data for the run_date"
     }
