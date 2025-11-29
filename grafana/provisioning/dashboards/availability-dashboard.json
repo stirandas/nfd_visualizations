@@ -25,8 +25,8 @@
             "axisLabel": "Hours after 3:30 PM IST",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 20,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
             "gradientMode": "none",
             "hideFrom": {
               "tooltip": false,
@@ -121,7 +121,7 @@
       ],
       "title": "Data Availability Latency Trend",
       "type": "timeseries",
-      "description": "X-axis: Trading Day | Y-axis: Hours after market closure (3:30 PM IST)"
+      "description": "X-axis: Trading Day | Y-axis: Hours after market closure"
     },
     {
       "datasource": {

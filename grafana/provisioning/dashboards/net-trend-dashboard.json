@@ -17,13 +17,15 @@
             "fieldConfig": {
                 "defaults": {
                     "color": {
-                        "mode": "thresholds"
+                        "mode": "palette-classic"
                     },
                     "custom": {
                         "axisCenteredZero": true,
                         "axisColorMode": "text",
                         "axisLabel": "₹ Crores",
                         "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "bars",
                         "fillOpacity": 80,
                         "gradientMode": "none",
                         "hideFrom": {
@@ -31,6 +33,14 @@
                             "tooltip": false,
                             "viz": false
                         },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
                         "stacking": {
                             "group": "A",
                             "mode": "none"
@@ -44,17 +54,52 @@
                         "mode": "absolute",
                         "steps": [
                             {
-                                "color": "red",
-                                "value": null
-                            },
-                            {
                                 "color": "green",
-                                "value": 0
+                                "value": null
                             }
                         ]
                     }
                 },
-                "overrides": []
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "DII Net"
+                        },
+                        "properties": [
+                            {
+                                "id": "displayName",
+                                "value": "DII Buy/Sell"
+                            },
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "blue",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "FII Net"
+                        },
+                        "properties": [
+                            {
+                                "id": "displayName",
+                                "value": "FII Buy/Sell"
+                            },
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "orange",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    }
+                ]
             },
             "gridPos": {
                 "h": 14,
@@ -73,9 +118,7 @@
                 "tooltip": {
                     "mode": "single",
                     "sort": "none"
-                },
-                "xTickLabelRotation": -45,
-                "xTickLabelMaxLength": 60
+                }
             },
             "targets": [
                 {
@@ -116,8 +159,8 @@
                 }
             ],
             "title": "FII/DII Net Buy/Sell Trend",
-            "description": "X-axis: Trading Day | Y-axis: ₹ Crores",
-            "type": "barchart"
+            "description": "X-axis: Trading Day | Y-axis: ₹ Crores | Blue: DII | Orange: FII",
+            "type": "timeseries"
         }
     ],
     "refresh": "",
