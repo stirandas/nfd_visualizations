@@ -67,7 +67,7 @@ This project visualizes FII (Foreign Institutional Investors) and DII (Domestic 
 2. **Access Grafana**:
    - URL: http://localhost:3000
    - The dashboard is automatically provisioned
-   - Navigate to: **Dashboards → NSE FII/DII Dashboard**
+   - Navigate to: **Dashboards*
 
 3. **Verify backend**:
    - API: http://localhost:8000/data

@@ -79,16 +79,38 @@ graph TB
 - **Response**: `{"message": "Welcome to the NFD Visualization API..."}`
 
 #### `GET /data`
-- **Purpose**: Fetch FII/DII data from PostgreSQL
-- **Query**: `SELECT RUN_DT, DII_NET, FII_NET FROM t_nse_fii_dii_eq_data ORDER BY RUN_DT ASC`
+- **Purpose**: Fetch all FII/DII data from PostgreSQL
+- **Query**: 
+  ```sql
+  SELECT 
+      RUN_DT, DII_BUY, DII_SELL, DII_NET, 
+      FII_BUY, FII_SELL, FII_NET, 
+      U_TS, I_TS,
+      to_char(i_ts AT TIME ZONE 'Asia/Kolkata', 'DD-Mon-YYYY HH24:MI') AS i_ts_ist,
+      to_char(u_ts AT TIME ZONE 'Asia/Kolkata', 'DD-Mon-YYYY HH24:MI') AS u_ts_ist,
+      EXTRACT(EPOCH FROM (i_ts - ((run_dt::timestamp + time '15:30') AT TIME ZONE 'Asia/Kolkata'))) / 3600 AS latency_hours,
+      EXTRACT(EPOCH FROM (i_ts AT TIME ZONE 'Asia/Kolkata')::time) AS availability_seconds
+  FROM t_nse_fii_dii_eq_data 
+  ORDER BY RUN_DT ASC
+  ```
 - **Response**: JSON array of records
 - **Example**:
   ```json
   [
     {
       "RUN_DT": "2025-01-15",
-      "DII_NET": 1234.56,
-      "FII_NET": -789.12
+      "DII_BUY": 5000.00,
+      "DII_SELL": 4000.00,
+      "DII_NET": 1000.00,
+      "FII_BUY": 6000.00,
+      "FII_SELL": 7000.00,
+      "FII_NET": -1000.00,
+      "U_TS": "2025-01-15 18:00:00+05:30",
+      "I_TS": "2025-01-15 18:00:00+05:30",
+      "I_TS_IST": "15-Jan-2025 18:00",
+      "U_TS_IST": "15-Jan-2025 18:00",
+      "LATENCY_HOURS": 2.5,
+      "AVAILABILITY_SECONDS": 64800
     }
   ]
   ```
@@ -143,13 +165,13 @@ Grafana is pre-configured using provisioning files mounted from [`grafana/provis
 ##### Datasource Configuration
 **File**: [`datasources/datasource.yml`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/datasources/datasource.yml)
 
-- **Name**: `PostgreSQL-Infinity`
+- **Name**: `nfd-Infinity`
 - **Type**: `yesoreyeram-infinity-datasource`
 - **Access Mode**: Proxy (Grafana server makes the API calls)
 - **Default**: Set as the default datasource
 
 ##### Dashboard Configuration
-**File**: [`dashboards/dashboard.json`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/dashboards/dashboard.json)
+**File**: [`dashboards/net-trend-dashboard.json`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/dashboards/net-trend-dashboard.json)
 
 **Dashboard Name**: NSE FII/DII Dashboard
 
@@ -291,7 +313,7 @@ Both services are on the same Docker network, enabling:
 | [`.env`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/.env) | PostgreSQL credentials (gitignored) |
 | [`grafana/provisioning/datasources/datasource.yml`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/datasources/datasource.yml) | Auto-configure Infinity datasource |
 | [`grafana/provisioning/dashboards/dashboard.yml`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/dashboards/dashboard.yml) | Dashboard provider config |
-| [`grafana/provisioning/dashboards/dashboard.json`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/dashboards/dashboard.json) | Dashboard definition |
+| [`grafana/provisioning/dashboards/net-trend-dashboard.json`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/dashboards/net-trend-dashboard.json) | Dashboard definition |
 
 ## Security Considerations
 

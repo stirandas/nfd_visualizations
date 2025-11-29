@@ -12,7 +12,7 @@
         {
             "datasource": {
                 "type": "yesoreyeram-infinity-datasource",
-                "uid": "Snowflake-Infinity"
+                "uid": "nfd-Infinity"
             },
             "fieldConfig": {
                 "defaults": {
@@ -24,29 +24,19 @@
                         "axisColorMode": "text",
                         "axisLabel": "₹ Crores",
                         "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 10,
+                        "fillOpacity": 80,
                         "gradientMode": "none",
                         "hideFrom": {
                             "legend": false,
                             "tooltip": false,
                             "viz": false
                         },
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 5,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "auto",
-                        "spanNulls": false,
                         "stacking": {
                             "group": "A",
                             "mode": "none"
                         },
                         "thresholdsStyle": {
-                            "mode": "area"
+                            "mode": "off"
                         }
                     },
                     "mappings": [],
@@ -83,7 +73,9 @@
                 "tooltip": {
                     "mode": "single",
                     "sort": "none"
-                }
+                },
+                "xTickLabelRotation": -45,
+                "xTickLabelMaxLength": 60
             },
             "targets": [
                 {
@@ -92,7 +84,7 @@
                             "selector": "RUN_DT",
                             "text": "Trading Day",
                             "type": "timestamp",
-                            "timestampFormat": "YYYY-MM-DD"
+                            "timestampFormat": "MM/DD"
                         },
                         {
                             "selector": "DII_NET",
@@ -107,7 +99,7 @@
                     ],
                     "datasource": {
                         "type": "yesoreyeram-infinity-datasource",
-                        "uid": "Snowflake-Infinity"
+                        "uid": "nfd-Infinity"
                     },
                     "format": "table",
                     "global_query_id": "",
@@ -123,15 +115,17 @@
                     }
                 }
             ],
-            "title": "DII/FII Net Buy/Sell Trend",
+            "title": "FII/DII Net Buy/Sell Trend",
             "description": "X-axis: Trading Day | Y-axis: ₹ Crores",
-            "type": "timeseries"
+            "type": "barchart"
         }
     ],
     "refresh": "",
     "schemaVersion": 38,
     "style": "dark",
-    "tags": [],
+    "tags": [
+        "Net Buy/Sell"
+    ],
     "templating": {
         "list": []
     },
@@ -140,9 +134,9 @@
         "to": "now"
     },
     "timepicker": {},
-    "timezone": "",
-    "title": "NSE FII/DII Dashboard",
+    "timezone": "browser",
+    "title": "FII/DII Net Buy/Sell Values",
     "uid": "nse-fii-dii",
     "version": 4,
-    "weekStart": ""
+    "weekStart": "Monday"
 }
