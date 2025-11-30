@@ -63,7 +63,7 @@ graph TB
 
 ### 2. Backend Service: FastAPI
 
-**Location**: [`backend/main.py`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/backend/main.py)
+**Location**: `backend/main.py`
 
 **Technology Stack**:
 - FastAPI (Python web framework)
@@ -160,10 +160,10 @@ GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource
 
 #### Provisioning (Auto-Configuration)
 
-Grafana is pre-configured using provisioning files mounted from [`grafana/provisioning`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning):
+Grafana is pre-configured using provisioning files mounted from `grafana/provisioning`:
 
 ##### Datasource Configuration
-**File**: [`datasources/datasource.yml`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/datasources/datasource.yml)
+**File**: `grafana/provisioning/datasources/datasource.yml`
 
 - **Name**: `nfd-Infinity`
 - **Type**: `yesoreyeram-infinity-datasource`
@@ -171,24 +171,45 @@ Grafana is pre-configured using provisioning files mounted from [`grafana/provis
 - **Default**: Set as the default datasource
 
 ##### Dashboard Configuration
-**File**: [`dashboards/net-trend-dashboard.json`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/dashboards/net-trend-dashboard.json)
+**Files**: Dashboard JSON files located in `grafana/provisioning/dashboards/`
 
-**Dashboard Name**: NSE FII/DII Dashboard
+**Five Pre-configured Dashboards**:
 
-**Panel Configuration**:
-- **Type**: Time series chart
-- **Title**: "DII/FII Net Buy/Sell Trend"
+1. **1.FII_DII-Net-Buy_Sell-Values.json** - Net Buy/Sell Trend
+   - Type: Timeseries line chart
+   - Shows DII (blue) and FII (orange) net values
+   - Features: Centered zero axis, trend visualization
+
+2. **2.FII_DII-Total-Buy_Sell-Values.json** - Total Buy/Sell Values
+   - Type: Bar charts (separate panels for DII and FII)
+   - Green bars for Buy, Red bars for Sell
+   - Features: Matched Y-axis scales for comparison
+
+3. **3.DII-Buy_Sell.json** - DII Buy/Sell Values
+   - Type: Timeseries bar chart centered at zero
+   - Green bars (positive) for Buy, Red bars (negative) for Sell
+   - Includes blue trend line showing DII net values
+   - Features: Symmetric Y-axis, diverging visualization
+
+4. **4.FII-Buy_Sell.json** - FII Buy/Sell Values
+   - Type: Timeseries bar chart centered at zero
+   - Green bars (positive) for Buy, Red bars (negative) for Sell
+   - Includes blue trend line showing FII net values
+   - Features: Symmetric Y-axis, diverging visualization
+
+5. **5.Data-Availability.json** - Data Availability & Latency
+   - Type: Bar chart
+   - Shows data latency in hours after market close
+   - Features: Weekend gaps visible, latency tracking
+
+**Common Features Across All Dashboards**:
+- **Data Source**: Calls `http://backend:8000/data`
 - **X-axis**: Trading Day (RUN_DT)
 - **Y-axis**: ₹ Crores
-- **Data Source**: Calls `http://backend:8000/data`
-- **Color Coding**:
-  - Red: Negative values (net selling)
-  - Green: Positive values (net buying)
-- **Features**:
-  - Centered zero axis
-  - Line chart with fill
-  - Auto-refresh capability
-  - Default time range: Last 30 days
+- **Color Coding**: Green (positive/buy), Red (negative/sell), Blue (trend/net)
+- **Time Range**: Last 30 days (default)
+- **Refresh**: Auto-refresh capability
+- **Auto-provisioning**: All dashboards deployed automatically via Docker
 
 ---
 
@@ -307,13 +328,38 @@ Both services are on the same Docker network, enabling:
 
 | File | Purpose |
 |------|---------|
-| [`docker-compose.yml`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/docker-compose.yml) | Orchestrates both services |
-| [`backend/Dockerfile`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/backend/Dockerfile) | Backend container definition |
-| [`backend/requirements.txt`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/backend/requirements.txt) | Python dependencies |
-| [`.env`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/.env) | PostgreSQL credentials (gitignored) |
-| [`grafana/provisioning/datasources/datasource.yml`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/datasources/datasource.yml) | Auto-configure Infinity datasource |
-| [`grafana/provisioning/dashboards/dashboard.yml`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/dashboards/dashboard.yml) | Dashboard provider config |
-| [`grafana/provisioning/dashboards/net-trend-dashboard.json`](file:///c:/Users/Srikanth%20Tirandas/Documents/LD/Projects/nfd_visualizations/grafana/provisioning/dashboards/net-trend-dashboard.json) | Dashboard definition |
+| `docker-compose.yml` | Orchestrates both services |
+| `backend/Dockerfile` | Backend container definition |
+| `backend/requirements.txt` | Python dependencies |
+| `.env` | PostgreSQL credentials (gitignored) |
+| `grafana/provisioning/datasources/datasource.yml` | Auto-configure Infinity datasource |
+| `grafana/provisioning/dashboards/dashboard.yml` | Dashboard provider config |
+| `grafana/provisioning/dashboards/` | All dashboard JSON files |
+
+## Docker Images & Build Artifacts
+
+### Image Sizes
+
+| Image | Tag | Size | Base Image |
+|-------|-----|------|-----------|
+| nfd_visualizations-backend | latest | 647 MB | python:3.9-slim |
+| nfd-grafana | v1.0 | 993 MB | grafana/grafana:latest |
+
+**Total Combined Size**: ~1.64 GB
+
+### Optimization
+
+- **Backend**: Uses `.dockerignore` to exclude unnecessary files (cache, venv, tests, docs)
+- **Grafana**: Extends official Grafana image, minimal additional files
+- Both images are optimized for production deployment
+
+### Building Images
+
+```bash
+docker-compose build
+```
+
+This command rebuilds both images locally. Subsequent builds will be faster due to layer caching.
 
 ## Security Considerations
 

@@ -308,8 +308,9 @@
     "schemaVersion": 38,
     "style": "dark",
     "tags": [
-        "Bar Chart",
-        "Cramped X Labels"
+        "Bar",
+        "Cramped-Xl",
+        "Uses-axisSoftMax"
     ],
     "templating": {
         "list": []

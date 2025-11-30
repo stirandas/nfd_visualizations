@@ -7,11 +7,12 @@ This project visualizes FII (Foreign Institutional Investors) and DII (Domestic 
 ✅ **Completed Features:**
 - FastAPI backend connecting to PostgreSQL
 - Custom Grafana image (`nfd-grafana:v1.0`)
-- Three pre-configured dashboards with interactive visualizations
-- Color-coded bar charts for easy data interpretation
+- Five pre-configured dashboards with interactive visualizations
+- Color-coded bar charts and diverging timeseries charts
 - Y-axis labeled as "₹ Crores"
 - Environment-based configuration
 - Docker containerization with automatic provisioning
+- Timeseries bar charts with net trend lines for comparative analysis
 
 🚧 **Pending:**
 - Cloud deployment (GCP deployment would cost ~$13-25/month)
@@ -24,20 +25,32 @@ This project visualizes FII (Foreign Institutional Investors) and DII (Domestic 
 
 ## Features
 
-### Three Interactive Dashboards
+### Five Interactive Dashboards
 
 1. **FII/DII Net Buy/Sell Trend**
-   - Bar chart visualization with zoom capability
-   - Blue bars for DII, Orange bars for FII
-   - Shows net trading values
+   - Timeseries line chart with zoom capability
+   - Blue line for DII, Orange line for FII
+   - Shows net trading values with trend visualization
 
 2. **FII/DII Total Buy/Sell Values**
-   - Stacked bar charts (Green: Buy, Red: Sell)
+   - Bar charts (Green: Buy, Red: Sell)
    - Matched Y-axis scales for honest comparison
    - Separate panels for DII and FII
 
-3. **Data Availability**
-   - Purple bar chart showing data latency
+3. **DII Buy/Sell Values**
+   - Timeseries bar chart centered at zero
+   - Green bars for Buy (positive), Red bars for Sell (negative)
+   - Blue trend line showing net DII values
+   - Symmetric Y-axis for balanced visualization
+
+4. **FII Buy/Sell Values**
+   - Timeseries bar chart centered at zero
+   - Green bars for Buy (positive), Red bars for Sell (negative)
+   - Blue trend line showing net FII values
+   - Symmetric Y-axis for balanced visualization
+
+5. **Data Availability**
+   - Bar chart showing data latency
    - Weekend gaps clearly visible
    - Latency tracking in hours after market close
 
@@ -83,8 +96,9 @@ This project visualizes FII (Foreign Institutional Investors) and DII (Domestic 
 
 2. **Access Grafana**:
    - URL: http://localhost:3000
-   - All 3 dashboards are automatically provisioned
+   - All 5 dashboards are automatically provisioned
    - Navigate to: **Dashboards** → Browse to see all available dashboards
+   - **New**: Dashboards 3 & 4 show comparative buy/sell analysis with trend lines
 
 3. **Verify backend**:
    - API: http://localhost:8000/data
@@ -108,12 +122,14 @@ nfd_visualizations/
 │   └── provisioning/
 │       ├── datasources/
 │       │   └── datasource.yml          # nfd-Infinity datasource
-│       └── dashboards/
-│           ├── dashboard.yml           # Dashboard provider config  
-│           ├── 1.FII_DII-Net-Buy_Sell-Values.json       # Net Buy/Sell Trend
-│           ├── 2.FII_DII-Total-Buy_Sell-Values.json     # Total Buy/Sell Values
-│           └── 3.data-availability.json                 # Data Availability
-├── docker-compose.yml      # Service orchestration
+       ├── dashboards/
+           ├── dashboard.yml                            # Dashboard provider config  
+           ├── 1.FII_DII-Net-Buy_Sell.json       # Net Buy/Sell Trend
+           ├── 2.FII_DII-Total-Buy_Sell.json     # FII_DII Absolute Buy/Sell Values
+           ├── 3.DII-Buy_Sell.json                      # DII Absolute Buy/Sell Values
+           ├── 4.FII-Buy_Sell.json                      # FII Absolute Buy/Sell Values
+           └── 5.Data-Availability.json                 # Data Availability
+├── docker-compose.yml     # Service orchestration
 ├── .env.sample            # Sample environment variables
 └── README.md              # This file
 ```

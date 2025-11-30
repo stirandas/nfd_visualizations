@@ -1,0 +1,27 @@
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (if using any build tools)
+node_modules/
+npm-debug.log
+
+# Any test files
+test_*
+*_test
+tests/

@@ -122,7 +122,7 @@
       ],
       "title": "Data Availability Latency Trend",
       "type": "timeseries",
-      "description": "X-axis: Trading Day | Y-axis: Hours after market closure"
+      "description": "X-axis: Trading Day | Y-axis: Hours NSE took to publish the data post market closure"
     },
     {
       "datasource": {
@@ -221,10 +221,10 @@
   "schemaVersion": 38,
   "style": "dark",
   "tags": [
-    "Time Series",
-    "Bar Chart",
+    "TimeSeries",
+    "Bar",
     "Table Data",
-    "Visible WE"
+    "WE"
   ],
   "templating": {
     "list": []
@@ -235,7 +235,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "3. Data Availability",
+  "title": "5. Data Availability",
   "uid": "availability-dashboard",
   "version": 0,
   "weekStart": "Monday"

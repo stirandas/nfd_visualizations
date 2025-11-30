@@ -25,8 +25,8 @@
                         "axisLabel": "₹ Crores",
                         "axisPlacement": "auto",
                         "barAlignment": 0,
-                        "drawStyle": "lines",
-                        "fillOpacity": 20,
+                        "drawStyle": "bars",
+                        "fillOpacity": 100,
                         "gradientMode": "none",
                         "hideFrom": {
                             "legend": false,
@@ -34,12 +34,12 @@
                             "viz": false
                         },
                         "lineInterpolation": "linear",
-                        "lineWidth": 2,
+                        "lineWidth": 1,
                         "pointSize": 5,
                         "scaleDistribution": {
                             "type": "linear"
                         },
-                        "showPoints": "auto",
+                        "showPoints": "never",
                         "spanNulls": false,
                         "stacking": {
                             "group": "A",
@@ -64,17 +64,13 @@
                     {
                         "matcher": {
                             "id": "byName",
-                            "options": "DII Net"
+                            "options": "FII Buy"
                         },
                         "properties": [
                             {
-                                "id": "displayName",
-                                "value": "DII Buy/Sell"
-                            },
-                            {
                                 "id": "color",
                                 "value": {
-                                    "fixedColor": "blue",
+                                    "fixedColor": "green",
                                     "mode": "fixed"
                                 }
                             }
@@ -83,26 +79,49 @@
                     {
                         "matcher": {
                             "id": "byName",
-                            "options": "FII Net"
+                            "options": "FII Sell"
                         },
                         "properties": [
                             {
-                                "id": "displayName",
-                                "value": "FII Buy/Sell"
-                            },
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "red",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "FII Net Trend"
+                        },
+                        "properties": [
                             {
                                 "id": "color",
                                 "value": {
-                                    "fixedColor": "orange",
+                                    "fixedColor": "blue",
                                     "mode": "fixed"
                                 }
+                            },
+                            {
+                                "id": "custom.drawStyle",
+                                "value": "line"
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
+                            },
+                            {
+                                "id": "custom.lineWidth",
+                                "value": 3
                             }
                         ]
                     }
                 ]
             },
             "gridPos": {
-                "h": 14,
+                "h": 12,
                 "w": 24,
                 "x": 0,
                 "y": 0
@@ -116,10 +135,65 @@
                     "showLegend": true
                 },
                 "tooltip": {
-                    "mode": "single",
+                    "mode": "multi",
                     "sort": "none"
                 }
             },
+            "transformations": [
+                {
+                    "id": "organize",
+                    "options": {
+                        "excludeByName": {},
+                        "indexByName": {},
+                        "renameByName": {}
+                    }
+                },
+                {
+                    "id": "filterFieldsByName",
+                    "options": {
+                        "include": {
+                            "names": [
+                                "Trading Day",
+                                "FII Buy",
+                                "FII Sell",
+                                "FII Net Trend"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "id": "calculateField",
+                    "options": {
+                        "alias": "FII Sell (Negative)",
+                        "binary": {
+                            "left": "FII Sell",
+                            "operator": "*",
+                            "right": "-1"
+                        },
+                        "mode": "binary",
+                        "reduce": {
+                            "reducer": ""
+                        }
+                    }
+                },
+                {
+                    "id": "organize",
+                    "options": {
+                        "excludeByName": {
+                            "FII Sell": true
+                        },
+                        "indexByName": {
+                            "Trading Day": 0,
+                            "FII Buy": 1,
+                            "FII Sell (Negative)": 2,
+                            "FII Net Trend": 3
+                        },
+                        "renameByName": {
+                            "FII Sell (Negative)": "FII Sell"
+                        }
+                    }
+                }
+            ],
             "targets": [
                 {
                     "columns": [
@@ -130,13 +204,18 @@
                             "timestampFormat": "MM/DD"
                         },
                         {
-                            "selector": "DII_NET",
-                            "text": "DII Net",
+                            "selector": "FII_BUY",
+                            "text": "FII Buy",
+                            "type": "number"
+                        },
+                        {
+                            "selector": "FII_SELL",
+                            "text": "FII Sell",
                             "type": "number"
                         },
                         {
                             "selector": "FII_NET",
-                            "text": "FII Net",
+                            "text": "FII Net Trend",
                             "type": "number"
                         }
                     ],
@@ -158,8 +237,8 @@
                     }
                 }
             ],
-            "title": "FII/DII Net Buy/Sell Trend",
-            "description": "X-axis: Trading Day | Y-axis: ₹ Crores | Blue: DII | Orange: FII",
+            "title": "FII Buy vs Sell",
+            "description": "FII Absolute Buy and Sell Values with Net Trend Line",
             "type": "timeseries"
         }
     ],
@@ -167,9 +246,13 @@
     "schemaVersion": 38,
     "style": "dark",
     "tags": [
-        "Favourite",
-        "Line Chart",
-        "Time Series"
+        "TimeSeries",
+        "Buy/Sell",
+        "FII",
+        "Bar",
+        "Line",
+        "WE",
+        "+-"
     ],
     "templating": {
         "list": []
@@ -180,8 +263,8 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "1. FII/DII Net Buy/Sell Values",
-    "uid": "nse-fii-dii",
-    "version": 4,
+    "title": "4. FII Buy/Sell Values",
+    "uid": "fii-buy-sell-diverging",
+    "version": 1,
     "weekStart": "Monday"
 }
