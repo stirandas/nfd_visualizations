@@ -221,7 +221,10 @@
   "schemaVersion": 38,
   "style": "dark",
   "tags": [
-    "Data Availability"
+    "Time Series",
+    "Bar Chart",
+    "Table Data",
+    "Visible WE"
   ],
   "templating": {
     "list": []
@@ -232,7 +235,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Data Availability",
+  "title": "3. Data Availability",
   "uid": "availability-dashboard",
   "version": 0,
   "weekStart": "Monday"

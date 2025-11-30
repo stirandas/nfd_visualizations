@@ -110,9 +110,9 @@ nfd_visualizations/
 │       │   └── datasource.yml          # nfd-Infinity datasource
 │       └── dashboards/
 │           ├── dashboard.yml           # Dashboard provider config  
-│           ├── net-trend-dashboard.json       # Net Buy/Sell Trend
-│           ├── buy-sell-dashboard.json        # Total Buy/Sell Values
-│           └── availability-dashboard.json    # Data Availability
+│           ├── 1.FII_DII-Net-Buy_Sell-Values.json       # Net Buy/Sell Trend
+│           ├── 2.FII_DII-Total-Buy_Sell-Values.json     # Total Buy/Sell Values
+│           └── 3.data-availability.json                 # Data Availability
 ├── docker-compose.yml      # Service orchestration
 ├── .env.sample            # Sample environment variables
 └── README.md              # This file

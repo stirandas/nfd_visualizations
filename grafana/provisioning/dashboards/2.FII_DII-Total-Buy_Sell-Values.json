@@ -25,9 +25,7 @@
                         "axisLabel": "₹ Crores",
                         "axisPlacement": "auto",
                         "axisSoftMin": 0,
-                        "axisSoftMax": 120000,
-                        "barAlignment": 0,
-                        "drawStyle": "bars",
+                        "axisSoftMax": 60000,
                         "fillOpacity": 100,
                         "gradientMode": "none",
                         "hideFrom": {
@@ -35,18 +33,11 @@
                             "tooltip": false,
                             "viz": false
                         },
-                        "lineInterpolation": "linear",
                         "lineWidth": 1,
-                        "pointSize": 5,
                         "scaleDistribution": {
                             "type": "linear"
                         },
-                        "showPoints": "auto",
                         "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "normal"
-                        },
                         "thresholdsStyle": {
                             "mode": "off"
                         }
@@ -96,23 +87,32 @@
                 ]
             },
             "gridPos": {
-                "h": 10,
+                "h": 12,
                 "w": 12,
                 "x": 0,
                 "y": 0
             },
             "id": 1,
             "options": {
+                "barRadius": 0,
+                "barWidth": 0.97,
+                "fullHighlight": false,
+                "groupWidth": 0.7,
                 "legend": {
                     "calcs": [],
                     "displayMode": "list",
                     "placement": "bottom",
                     "showLegend": true
                 },
+                "orientation": "auto",
+                "showValue": "never",
+                "stacking": "none",
                 "tooltip": {
                     "mode": "single",
                     "sort": "none"
-                }
+                },
+                "xTickLabelRotation": -45,
+                "xTickLabelSpacing": 3
             },
             "targets": [
                 {
@@ -154,7 +154,7 @@
             ],
             "title": "DII Buy vs Sell",
             "description": "X-axis: Trading Day | Y-axis: ₹ Crores",
-            "type": "timeseries"
+            "type": "barchart"
         },
         {
             "datasource": {
@@ -172,9 +172,7 @@
                         "axisLabel": "₹ Crores",
                         "axisPlacement": "auto",
                         "axisSoftMin": 0,
-                        "axisSoftMax": 120000,
-                        "barAlignment": 0,
-                        "drawStyle": "bars",
+                        "axisSoftMax": 60000,
                         "fillOpacity": 100,
                         "gradientMode": "none",
                         "hideFrom": {
@@ -182,18 +180,11 @@
                             "tooltip": false,
                             "viz": false
                         },
-                        "lineInterpolation": "linear",
                         "lineWidth": 1,
-                        "pointSize": 5,
                         "scaleDistribution": {
                             "type": "linear"
                         },
-                        "showPoints": "auto",
                         "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "normal"
-                        },
                         "thresholdsStyle": {
                             "mode": "off"
                         }
@@ -243,23 +234,32 @@
                 ]
             },
             "gridPos": {
-                "h": 10,
+                "h": 12,
                 "w": 12,
                 "x": 12,
                 "y": 0
             },
             "id": 2,
             "options": {
+                "barRadius": 0,
+                "barWidth": 0.97,
+                "fullHighlight": false,
+                "groupWidth": 0.7,
                 "legend": {
                     "calcs": [],
                     "displayMode": "list",
                     "placement": "bottom",
                     "showLegend": true
                 },
+                "orientation": "auto",
+                "showValue": "never",
+                "stacking": "none",
                 "tooltip": {
                     "mode": "single",
                     "sort": "none"
-                }
+                },
+                "xTickLabelRotation": -45,
+                "xTickLabelSpacing": 5
             },
             "targets": [
                 {
@@ -301,14 +301,15 @@
             ],
             "title": "FII Buy vs Sell",
             "description": "X-axis: Trading Day | Y-axis: ₹ Crores",
-            "type": "timeseries"
+            "type": "barchart"
         }
     ],
     "refresh": "",
     "schemaVersion": 38,
     "style": "dark",
     "tags": [
-        "Total Buy/Sell"
+        "Bar Chart",
+        "Cramped X Labels"
     ],
     "templating": {
         "list": []
@@ -319,7 +320,7 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "FII/DII Total Buy/Sell Values",
+    "title": "2. FII/DII Total Buy/Sell Values",
     "uid": "fii-dii-buy-sell",
     "version": 1,
     "weekStart": "Monday"

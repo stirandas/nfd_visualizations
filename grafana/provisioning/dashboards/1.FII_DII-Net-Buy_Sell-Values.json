@@ -25,8 +25,8 @@
                         "axisLabel": "₹ Crores",
                         "axisPlacement": "auto",
                         "barAlignment": 0,
-                        "drawStyle": "bars",
-                        "fillOpacity": 80,
+                        "drawStyle": "lines",
+                        "fillOpacity": 20,
                         "gradientMode": "none",
                         "hideFrom": {
                             "legend": false,
@@ -34,7 +34,7 @@
                             "viz": false
                         },
                         "lineInterpolation": "linear",
-                        "lineWidth": 1,
+                        "lineWidth": 2,
                         "pointSize": 5,
                         "scaleDistribution": {
                             "type": "linear"
@@ -167,7 +167,9 @@
     "schemaVersion": 38,
     "style": "dark",
     "tags": [
-        "Net Buy/Sell"
+        "Favourite",
+        "Line Chart",
+        "Time Series"
     ],
     "templating": {
         "list": []
@@ -178,7 +180,7 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "FII/DII Net Buy/Sell Values",
+    "title": "1. FII/DII Net Buy/Sell Values",
     "uid": "nse-fii-dii",
     "version": 4,
     "weekStart": "Monday"
